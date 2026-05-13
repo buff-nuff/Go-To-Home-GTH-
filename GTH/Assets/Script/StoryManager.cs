@@ -59,6 +59,12 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+    public void OnStoryEnded()
+    {
+        Debug.Log("스토리가 끝났습니다. 전투를 시작합니다.");
+        GameManager.Instance.StartBattle();
+    }
+
     void DisplayCurrentDialogue()
     {
         nameText.text = dialogues[currentIndex].name;
