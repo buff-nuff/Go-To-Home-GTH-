@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class Dialogue
@@ -22,6 +23,9 @@ public class StoryManager : MonoBehaviour
     public Dialogue[] dialogues;
 
     private int currentIndex = 0;
+
+    [Header("이동할 씬 이름")]
+    public string nextSceneName = "GameScene";
 
     void Start()
     {
@@ -49,8 +53,9 @@ public class StoryManager : MonoBehaviour
         }
         else
         {
-            storyText.text = "이야기가 끝났습니다.";
+            Debug.Log("모든 대사가 끝났습니다. 다음 씬으로 이동합니다."); 
             nameText.text = "";
+            SceneManager.LoadScene(nextSceneName);
         }
     }
 
