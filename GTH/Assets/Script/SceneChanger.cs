@@ -4,7 +4,7 @@ public class SceneChanger : MonoBehaviour
     
     public void GoToGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("StoryScene1");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("OpenningScene");
     }
 
     public void QuitGame()

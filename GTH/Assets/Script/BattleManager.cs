@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
+    public string nextScneneName;
 
     [Header("상태 관리")]
     public int playerLife = 2;
@@ -60,4 +62,28 @@ public class BattleManager : MonoBehaviour
             // GameManager.Instance.GoToNextStory;
         }
       }
+
+    void GoToNextStage()
+    {
+        
     }
+    
+        public bool TryGetNextSceneName(out string outNextSceneName)
+    {
+        outNextSceneName = nextScneneName;
+        if (Instance == null)
+        {
+            return false;
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(nextScneneName))
+            {
+                Debug.LogWarning("nextSceneName이 존재하나,없거나 적지 않음");
+                return false;
+            }
+            return true;
+        }
+    }
+
+}

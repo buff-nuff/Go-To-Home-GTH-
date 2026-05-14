@@ -50,10 +50,11 @@ public class StoryManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("모든 대사가 끝났습니다. 다음 씬으로 이동합니다."); 
-            nameText.text = "";
-            storyText.text = "";
-            
+            Debug.Log("모든 대사가 끝났습니다. 다음 씬으로 이동합니다.");
+            if (SceneName.Instance.TryGetNextSceneName(out string sceneName))
+            {
+                SceneManager.LoadScene(sceneName);
+            }
         }
     }
 
