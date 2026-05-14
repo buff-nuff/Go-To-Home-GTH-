@@ -1,36 +1,53 @@
 using UnityEngine;
 
-
 public enum NoteType { TapNote, AvoidNote }
+
+[RequireComponent(typeof(SpriteRenderer))]
 public class NoteObject : MonoBehaviour
 {
     public NoteType type;
-    public float speed = 500f;
     public float beatTime;
-    public float targetx;
-    public float moveSpeed;
-    public bool isInitialized = false;
+    private float startX;
+    private float targetX;
+    private float scrollTime;
+    private float spawnTime;
+    private bool isInitialized = false;
 
-    public void Initialize(float startx, float targetx, float scrollTime)
+    private SpriteRenderer sr;
+
+    private void Awake()
     {
-        this.targetx = targetx;
-        moveSpeed = (startx - targetx) / scrollTime;
-        isInitialized = true;
+        sr = GetComponent<SpriteRenderer>();
     }
-    private void Update()
+
+    public void Initialize(float startX, float targetX, float scrollTime, float beatTime, float currentSongTime)
+    {
+        this.startX = startX;
+        this.targetX = targetX;
+        this.scrollTime = scrollTime;
+        this.beatTime = beatTime;
+        this.spawnTime = currentSongTime;
+        this.isInitialized = true;
+    }
+
+    public void UpdatePosition(float currentSongTime)
     {
         if (!isInitialized) return;
-        transform.Translate(Vector3.left * speed * Time.deltaTime);
-        
+
+        float elapsed = currentSongTime - spawnTime;
+        float t = elapsed / scrollTime;   // Clamp 제거! 판정선 지나서도 계속 흐름
+        float x = Mathf.LerpUnclamped(startX, targetX, t);
+
+        Vector3 pos = transform.position;
+        pos.x = x;
+        transform.position = pos;
     }
 
     public void SetType(NoteType newType)
     {
         type = newType;
-        GetComponent<SpriteRenderer>().color = (type == NoteType.TapNote) ? Color.blue : Color.red;
-        // <bool> ? <ture value> : <false value>
-        // <bool> ? <ture value> :
-        // <bool> ? <ture value> : <false value>
-        // 삼항 연산
+        if (sr == null) sr = GetComponent<SpriteRenderer>();
+        sr.color = (type == NoteType.TapNote) ? Color.blue : Color.red;
     }
 }
+
