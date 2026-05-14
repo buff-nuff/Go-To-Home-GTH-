@@ -292,8 +292,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 23.007, y: -259.24}
-  m_SizeDelta: {x: 285.2833, y: 88.8329}
+  m_AnchoredPosition: {x: 20.999985, y: -253.66}
+  m_SizeDelta: {x: 451.4709, y: 88.8329}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &569004000
 MonoBehaviour:
@@ -342,8 +342,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 44.92
+  m_fontSizeBase: 44.92
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -605,25 +605,29 @@ MonoBehaviour:
   nameText: {fileID: 569004000}
   storyText: {fileID: 1796077251}
   dialogues:
-  - name: "\uC54C\uBC14\uC0DD"
-    sentence: "\uC800\uAE30\uC694! \uC720\uAE30\uBB18 \uC785\uC591 \uD64D\uBCF4 \uC911\uC778\uB370
-      \uC7A0\uAE50 \uBCF4\uACE0 \uAC00\uC2E4\uB798\uC694?"
-  - name: "\uC774\uC548"
-    sentence: "\uC720\uAE30\uBB18... \uC785\uC591...?"
-  - name: "\uC54C\uBC14\uC0DD"
-    sentence: "\uB124! \uC544\uC774\uB4E4\uC5D0\uAC8C \uB530\uB73B\uD55C \uAC00\uC871\uC744
-      \uCC3E\uC544\uC8FC\uB294 \uCEA0\uD398\uC778\uC774\uC5D0\uC694!"
-  - name: "\uC774\uC548"
-    sentence: "\uBB50\uB77C\uACE0...? \uACE0\uC591\uC774\uB4E4\uC744 \uC778\uAC04\uACC4
-      \uACC4\uC57D\uC5D0 \uBB36\uC5B4\uB450\uACA0\uB2E4\uB294 \uAC74\uAC00!"
-  - name: "\uC54C\uBC14\uC0DD"
-    sentence: "\uB124? \uC544\uB2C8, \uADF8\uAC8C \uC544\uB2C8\uB77C\uC694..."
-  - name: "\uC774\uC548"
-    sentence: "\uC6A9\uC11C \uBABB \uD55C\uB2E4. \uB3D9\uBB3C\uC758 \uC790\uC720\uB294
-      \uB0B4\uAC00 \uC9C0\uD0A8\uB2E4!"
-  - name: "\uC54C\uBC14\uC0DD"
-    sentence: "\uC800, \uC800\uAE30\uC694?! \uC65C \uAC11\uC790\uAE30 \uC804\uD22C
-      \uC790\uC138\uB97C?!"
+  - name: "\uB098\uB798\uC774\uC158"
+    sentence: "\uD559\uAD50 \uC815\uBB38\uC744 \uB098\uC11C\uC790....\uD574\uC9C8\uB158\uC758
+      \uBE5B\uC774 \uB098\uB978\uB098\uB978\uD55C \uC8FC\uD669\uC0C9\uC73C\uB85C
+      \uBC88\uC9C0\uAE30 \uC2DC\uC791\uD588\uB2E4\r\n\uD559\uAD50 \uC55E \uBCF4\uAE09\uC13C\uD130\uC5D0\uC11C\uB294
+      \uB530\uB73B\uD55C \uB0C4\uC0C8\uAC00 \uC2A4\uBA40\uC2A4\uBA40 \uD758\uB7EC\uB098\uC624\uACE0
+      \uC788\uC5C8\uB2E4 \r\n"
+  - name: "\uD478\uB4DC\uD2B8\uB7ED \uC0AC\uC7A5"
+    sentence: "\uC5B4\uC774, \uD559\uC0DD! \uC624\uB298\uB3C4 \uB2A6\uAC8C \uAC00\uB124?"
+  - name: "\uC774\uD604"
+    sentence: "\u2026\u2026!"
+  - name: "\uB098\uB798\uC774\uC158"
+    sentence: "\uD604\uC758 \uC2DC\uC57C\uAC00 \uC0B4\uC9DD \uD754\uB4E4\uB9AC\uACE0\r\n\uD478\uB4DC\uD2B8\uB7ED\uC758
+      \uBD88\uBE5B\uC774 \uBC18\uC9DD\uC774\uBA70, \uC0AC\uC7A5\uC758 \uC55E\uCE58\uB9C8\uAC00
+      \uC774\uC0C1\uD558\uAC8C \uBE5B\uB098 \uBCF4\uC774\uAE34\uD55C\uB2E4"
+  - name: "\uC774\uD604"
+    sentence: "\uC800 \uD669\uB871\uD558\uACE0 \uACE0\uAE09\uC9C4 \uBE5B\u2026!?\uC124\uB9C8...?!"
+  - name: "\uD478\uB4DC\uD2B8\uB7ED \uC0AC\uC7A5"
+    sentence: "\uC544\uC800\uC528\uB791 [\uBE44\uBC00]\uB5A1\uBCF6\uC774 \uD55C\uBC88
+      \uBA39\uC5B4\uBCF4\uB828?"
+  - name: "\uC774\uD604\uC758 \uD658\uC0C1 \uC18D"
+    sentence: "\uD6C4\uD6C4\u2026\u2026 \uB18D\uC758 \uAC00\uD638\uB97C \uBC1B\uC740
+      \uB9C8\uBC95\uC18C\uB144\uC774\uC5EC....\r\n\uB098\uC758 \uB530\uB048\uB530\uB048\uD55C
+      \uAD74\uBCF5\uD560\uC218\uBC16\uC5D0 \uC5C6\uB294(?)\uB97C \uBC1B\uC544\uBCF4\uB828?"
 --- !u!4 &873781400
 Transform:
   m_ObjectHideFlags: 0
@@ -1263,8 +1267,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.7, y: -425}
-  m_SizeDelta: {x: 2009.4, y: 179.1092}
+  m_AnchoredPosition: {x: 28.53, y: -426}
+  m_SizeDelta: {x: 2016.4, y: 283.7142}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1796077251
 MonoBehaviour:
@@ -1313,8 +1317,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 66.2
-  m_fontSizeBase: 66.2
+  m_fontSize: 51.61
+  m_fontSizeBase: 51.61
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
