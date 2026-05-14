@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
@@ -55,6 +53,7 @@ public class StoryManager : MonoBehaviour
         {
             Debug.Log("모든 대사가 끝났습니다. 다음 씬으로 이동합니다."); 
             nameText.text = "";
+            storyText.text = "";
             SceneManager.LoadScene(nextSceneName);
         }
     }
