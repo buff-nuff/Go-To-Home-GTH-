@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e4ed49d7569e9448bfd3139c3201bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneName
-  nextScneneName: 
+  nextScneneName: StoryScene2
 --- !u!4 &728558171
 Transform:
   m_ObjectHideFlags: 0
