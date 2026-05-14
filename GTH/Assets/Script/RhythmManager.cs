@@ -6,10 +6,10 @@ public enum Judge { Perfect, Good, Bad, Miss}
 public class RhythmManager : MonoBehaviour
 {
     public RectTransform hitZone;
-    public GameObject notePrefab;
+    public NoteObject notePrefab;
     public float noteSpeed = 500f;
 
-    private List<GameObject> activeNotes = new List<GameObject>();
+    private List<NoteObject> activeNotes = new List<NoteObject>();
     public static List<Judge> judges = new List<Judge>();
     private void Update()
     {
@@ -28,23 +28,31 @@ public class RhythmManager : MonoBehaviour
         {
             CheckJudgment();
         }
+
     }
 
     void CheckJudgment()
     {
         if (activeNotes.Count == 0) return;
 
-        GameObject closestNote = activeNotes[0];
-        float distance = Mathf.Abs(closestNote.transform.localPosition.x - hitZone.localPosition.x);
+        NoteObject closestNote = activeNotes[0];
 
-        if (distance < 20f) RecordResult(Judge.Perfect);
-        else if (distance < 50f) RecordResult(Judge.Good);
-        else RecordResult(Judge.Bad);
+        if (closestNote.type == NoteType.AvoidNote)
+        {
+            RecordResult(Judge.Bad);
+        }
+        else
+        {
+            float distance = Mathf.Abs(closestNote.transform.localPosition.x - hitZone.localPosition.x);
+
+            if (distance < 20f) RecordResult(Judge.Perfect);
+            else if (distance < 50f) RecordResult(Judge.Good);
+            else RecordResult(Judge.Bad);
+        }
 
         Destroy(closestNote);
         activeNotes.RemoveAt(0);
     }
-
     void RecordResult(Judge result)
     {
         
