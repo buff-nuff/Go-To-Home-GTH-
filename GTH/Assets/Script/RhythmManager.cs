@@ -9,6 +9,7 @@ public class RhythmManager : MonoBehaviour
     public NoteObject notePrefab;
     public Transform spawnPoint;
     public Transform hitZone;
+   
 
     [Header("스크롤 설정")]
     public float scrollTime = 2.0f;
@@ -19,7 +20,7 @@ public class RhythmManager : MonoBehaviour
     public float badRange = 1.0f;
     public float missDistance = 1.5f;
 
-    [Header("노트 패턴")]
+    [Header("기본 패턴 (테스트용)")]
     public List<NoteData> notePattern = new List<NoteData>
     {
         new NoteData(2.0f, NoteType.TapNote),
@@ -38,13 +39,20 @@ public class RhythmManager : MonoBehaviour
     private int spawnIndex = 0;
     private float songTime = 0f;
     private int direction = 1;
+    private bool useAudioManager = false;
 
     private int perfectCount = 0;
     private int totalJudgedNotes = 0;
     private bool isRunning = false;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
+        PlayMusic();
+
         direction = (hitZone.position.x > spawnPoint.position.x) ? 1 : -1;
 
         if (autoStartOnPlay && BattleManager.Instance == null)
@@ -53,10 +61,51 @@ public class RhythmManager : MonoBehaviour
         }
     }
 
+    public void PlayMusic()
+    {
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+            Debug.Log(audioSource.clip.name + "노래 재생 시작");
+        }
+    }
+
+    public void StopMusic()
+    {
+        audioSource.Stop();
+    }
+
+    /// <summary>
+    /// 패턴만 시작 (노래 없이). 기본 패턴 사용 또는 인자로 받음.
+    /// </summary>
     public void StartPattern(List<NoteData> newPattern = null)
+    {
+        StartPattern(newPattern, null);
+    }
+
+    /// <summary>
+    /// 패턴 + 음악 동시 시작. EnemyAI가 호출.
+    /// </summary>
+    public void StartPattern(List<NoteData> newPattern, AudioClip music)
     {
         if (newPattern != null) notePattern = newPattern;
 
+        // 음악 재생
+        if (music != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySong(music);
+            useAudioManager = true;
+        }
+        else
+        {
+            useAudioManager = false;
+        }
+
+        ResetAndStart();
+    }
+
+    private void ResetAndStart()
+    {
         foreach (var n in activeNotes) if (n != null) Destroy(n.gameObject);
         activeNotes.Clear();
 
@@ -66,15 +115,20 @@ public class RhythmManager : MonoBehaviour
         totalJudgedNotes = 0;
         isRunning = true;
 
-        Debug.Log($"패턴 시작! 노트 {notePattern.Count}개");
+        Debug.Log($"패턴 시작! 노트 {notePattern.Count}개, AudioManager 사용: {useAudioManager}");
     }
 
     private void Update()
     {
         if (!isRunning) return;
 
-        songTime += Time.deltaTime;
+        // 곡 시간: AudioManager 우선, 없으면 deltaTime 누적
+        if (useAudioManager && AudioManager.Instance != null)
+            songTime = AudioManager.Instance.GetSongTime();
+        else
+            songTime += Time.deltaTime;
 
+        // 노트 스폰
         while (spawnIndex < notePattern.Count &&
                songTime >= notePattern[spawnIndex].beatTime - scrollTime)
         {
@@ -82,17 +136,20 @@ public class RhythmManager : MonoBehaviour
             spawnIndex++;
         }
 
+        // 위치 갱신
         for (int i = 0; i < activeNotes.Count; i++)
         {
             if (activeNotes[i] != null)
                 activeNotes[i].UpdatePosition(songTime);
         }
 
+        // 입력
         if (Input.GetKeyDown(tapKey))
         {
             CheckJudgment();
         }
 
+        // Miss 처리
         for (int i = activeNotes.Count - 1; i >= 0; i--)
         {
             if (activeNotes[i] == null) { activeNotes.RemoveAt(i); continue; }
@@ -102,13 +159,12 @@ public class RhythmManager : MonoBehaviour
             if (signedDistance > missDistance)
             {
                 if (activeNotes[i].type == NoteType.TapNote)
-                {
                     RecordJudge(Judge.Miss);
-                }
                 RemoveNote(i);
             }
         }
 
+        // 종료 체크
         if (spawnIndex >= notePattern.Count && activeNotes.Count == 0)
         {
             EndPattern();
@@ -164,7 +220,6 @@ public class RhythmManager : MonoBehaviour
         totalJudgedNotes++;
         if (result == Judge.Perfect) perfectCount++;
 
-        // UI 표시
         if (JudgeTextUI.Instance != null)
             JudgeTextUI.Instance.Show(result);
     }

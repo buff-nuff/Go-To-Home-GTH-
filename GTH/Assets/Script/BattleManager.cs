@@ -29,6 +29,7 @@ public class BattleManager : MonoBehaviour
 
     private void Start()
     {
+        stigmataCount = 0;
         RefreshUI();
         Invoke(nameof(StartEnemyTurn), 0.1f);
     }
@@ -46,8 +47,16 @@ public class BattleManager : MonoBehaviour
         isPlayerTurn = false;
         Debug.Log("=== 적의 공격! 리듬 패턴 시작 ===");
 
-        if (enemyAI != null) enemyAI.SelectPattern();
-        if (rhythmManager != null) rhythmManager.StartPattern();
+        // EnemyAI가 GameManager.currentStageIndex에 따라 패턴+음악 시작
+        if (enemyAI != null)
+        {
+            enemyAI.SelectPattern();
+        }
+        else if (rhythmManager != null)
+        {
+            // EnemyAI 없으면 RhythmManager의 기본 패턴 사용 (테스트용)
+            rhythmManager.StartPattern();
+        }
     }
 
     public void OnRhythmPatternEnd(int perfectCount, int totalNotes)
@@ -81,7 +90,7 @@ public class BattleManager : MonoBehaviour
         if (stigmataCount >= stigmataRequired)
         {
             isPlayerTurn = true;
-            Debug.Log($"플레이어 턴! 각인 풀충전 ({stigmataCount}/{stigmataRequired}). A키로 공격!");
+            Debug.Log($"플레이어 턴! 각인 풀충전. A키로 공격!");
         }
         else
         {
@@ -116,6 +125,8 @@ public class BattleManager : MonoBehaviour
     void Victory()
     {
         Debug.Log("=== 모든 코어 파괴! 승리! ===");
+        if (AudioManager.Instance != null) AudioManager.Instance.StopSong();
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.GoToNextStory();
@@ -129,6 +140,7 @@ public class BattleManager : MonoBehaviour
     void GameOver()
     {
         Debug.Log("=== 플레이어 패배... 게임 오버 ===");
+        if (AudioManager.Instance != null) AudioManager.Instance.StopSong();
     }
 
     void RefreshUI()
