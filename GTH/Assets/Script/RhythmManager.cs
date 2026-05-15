@@ -31,18 +31,48 @@ public class RhythmManager : MonoBehaviour
 
     public KeyCode tapKey = KeyCode.Space;
 
+    [Header("자동 시작 (BattleManager 없이 테스트용)")]
+    public bool autoStartOnPlay = true;
+
     private List<NoteObject> activeNotes = new List<NoteObject>();
     private int spawnIndex = 0;
     private float songTime = 0f;
     private int direction = 1;
 
+    private int perfectCount = 0;
+    private int totalJudgedNotes = 0;
+    private bool isRunning = false;
+
     private void Start()
     {
         direction = (hitZone.position.x > spawnPoint.position.x) ? 1 : -1;
+
+        if (autoStartOnPlay && BattleManager.Instance == null)
+        {
+            StartPattern();
+        }
+    }
+
+    public void StartPattern(List<NoteData> newPattern = null)
+    {
+        if (newPattern != null) notePattern = newPattern;
+
+        foreach (var n in activeNotes) if (n != null) Destroy(n.gameObject);
+        activeNotes.Clear();
+
+        spawnIndex = 0;
+        songTime = 0f;
+        perfectCount = 0;
+        totalJudgedNotes = 0;
+        isRunning = true;
+
+        Debug.Log($"패턴 시작! 노트 {notePattern.Count}개");
     }
 
     private void Update()
     {
+        if (!isRunning) return;
+
         songTime += Time.deltaTime;
 
         while (spawnIndex < notePattern.Count &&
@@ -72,9 +102,16 @@ public class RhythmManager : MonoBehaviour
             if (signedDistance > missDistance)
             {
                 if (activeNotes[i].type == NoteType.TapNote)
-                    Debug.Log("판정 결과 : Miss");
+                {
+                    RecordJudge(Judge.Miss);
+                }
                 RemoveNote(i);
             }
+        }
+
+        if (spawnIndex >= notePattern.Count && activeNotes.Count == 0)
+        {
+            EndPattern();
         }
     }
 
@@ -106,17 +143,30 @@ public class RhythmManager : MonoBehaviour
 
         if (closest.type == NoteType.AvoidNote)
         {
-            Debug.Log("판정 결과 : Bad");
+            RecordJudge(Judge.Bad);
             RemoveNote(closestIndex);
             return;
         }
 
-        if (minDistance <= perfectRange) Debug.Log("판정 결과 : Perfect");
-        else if (minDistance <= goodRange) Debug.Log("판정 결과 : Good");
-        else if (minDistance <= badRange) Debug.Log("판정 결과 : Bad");
+        Judge result;
+        if (minDistance <= perfectRange) result = Judge.Perfect;
+        else if (minDistance <= goodRange) result = Judge.Good;
+        else if (minDistance <= badRange) result = Judge.Bad;
         else return;
 
+        RecordJudge(result);
         RemoveNote(closestIndex);
+    }
+
+    void RecordJudge(Judge result)
+    {
+        Debug.Log($"판정 결과 : {result}");
+        totalJudgedNotes++;
+        if (result == Judge.Perfect) perfectCount++;
+
+        // UI 표시
+        if (JudgeTextUI.Instance != null)
+            JudgeTextUI.Instance.Show(result);
     }
 
     void RemoveNote(int index)
@@ -125,5 +175,19 @@ public class RhythmManager : MonoBehaviour
         NoteObject note = activeNotes[index];
         activeNotes.RemoveAt(index);
         if (note != null) Destroy(note.gameObject);
+    }
+
+    void EndPattern()
+    {
+        isRunning = false;
+        Debug.Log($"패턴 종료. Perfect: {perfectCount} / 전체 판정: {totalJudgedNotes}");
+
+        int tapNoteCount = 0;
+        foreach (var n in notePattern) if (n.type == NoteType.TapNote) tapNoteCount++;
+
+        if (BattleManager.Instance != null)
+        {
+            BattleManager.Instance.OnRhythmPatternEnd(perfectCount, tapNoteCount);
+        }
     }
 }
